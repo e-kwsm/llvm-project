@@ -44,7 +44,7 @@ class SplitFileTarget:
         self.lines = self.lines[self.slice_start_idx + 1 :]
         slice_end_idx = None
         for i, l in enumerate(self.lines):
-            if SplitFileTarget._get_split_line_path(l) != None:
+            if SplitFileTarget._get_split_line_path(l) is not None:
                 slice_end_idx = i
                 break
         if slice_end_idx is not None:
