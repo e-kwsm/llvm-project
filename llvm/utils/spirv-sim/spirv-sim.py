@@ -601,7 +601,7 @@ def load_instructions(filename: str):
     instructions = []
     for i in [Instruction(x) for x in lines]:
         out = parseInstruction(i)
-        if out != None:
+        if out is not None:
             instructions.append(out)
     return instructions
 
