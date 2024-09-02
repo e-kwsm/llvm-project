@@ -1936,7 +1936,7 @@ def get_ftms(
         implemented = True
         for std in std_dialects:
             if std not in feature["values"].keys():
-                if last == None:
+                if last is None:
                     continue
                 else:
                     entry[std] = last
