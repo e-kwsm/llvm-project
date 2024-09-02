@@ -2054,7 +2054,7 @@ def get_ftms(
         implemented = True
         for std in std_dialects:
             if std not in feature["values"].keys():
-                if last == None:
+                if last is None:
                     continue
                 else:
                     entry[std] = last
@@ -2467,7 +2467,7 @@ class FeatureTestMacros:
     def generate_ftm_test(self, std: Std, ftm: Ftm, value: FtmHeaderTest) -> str:
         """Adds a single `ftm` test for C++ `std` based on the status information in `value`.
 
-        When std == None this test is generating the TEST_STD_VER < MIN. Where
+        When std is None this test is generating the TEST_STD_VER < MIN. Where
         MIN is the minimum version that has a FTM defined. (In the real data
         this is 14, since FTM have been introduced in C++14.)
         """
@@ -2517,7 +2517,7 @@ class FeatureTestMacros:
 #  endif
 """
 
-        if std == None or value == None:
+        if std is None or value is None:
             return ftm_unavailable_in_dialect.format(
                 ftm=ftm, dialect=self.ftm_metadata[ftm].available_since
             )
