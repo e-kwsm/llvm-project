@@ -1722,7 +1722,7 @@ class Base(unittest.TestCase):
         yaml2macho_core_bin = configuration.get_yaml2macho_core_path()
         if not yaml2macho_core_bin:
             self.assertTrue(False, "No valid yaml2macho-core executable specified")
-        if uuids != None:
+        if uuids is not None:
             command = [
                 yaml2macho_core_bin,
                 "-i",
