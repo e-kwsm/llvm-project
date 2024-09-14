@@ -13,7 +13,7 @@ class Enumeration:
         self.value = value
 
     def __str__(self):
-        if self.value != None:
+        if self.value is not None:
             return f"{self.name} = {self.value}"
         else:
             return f"{self.name}"
