@@ -222,7 +222,7 @@ class TwoArgGroupsCommand(ReportingCmd):
         ov_parser = self.get_parser()
         value = ov_parser.dest_for_option(long_option)[0 : cursor_pos + 1]
         proc_value = ov_parser.proc_name
-        if proc_value != None:
+        if proc_value is not None:
             new_str = value + proc_value
             ret_arr = {"completion": new_str, "mode": "partial"}
             return ret_arr
