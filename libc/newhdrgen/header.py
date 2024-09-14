@@ -50,11 +50,11 @@ class HeaderFile:
 
         current_guard = None
         for function in self.functions:
-            if function.guard == None:
+            if function.guard is None:
                 content.append(str(function) + " __NOEXCEPT;")
                 content.append("")
             else:
-                if current_guard == None:
+                if current_guard is None:
                     current_guard = function.guard
                     content.append(f"#ifdef {current_guard}")
                     content.append(str(function) + " __NOEXCEPT;")
@@ -70,7 +70,7 @@ class HeaderFile:
                     content.append(f"#ifdef {current_guard}")
                     content.append(str(function) + " __NOEXCEPT;")
                     content.append("")
-        if current_guard != None:
+        if current_guard is not None:
             content.pop()
             content.append(f"#endif // {current_guard}")
             content.append("")
