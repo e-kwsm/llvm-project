@@ -301,7 +301,7 @@ def interpret(bytecode: bytearray, control: list, data: list, tracing: bool = Fa
 
     while frame[-1][0] < len(bytecode):
         b = next_byte()
-        if b == None:
+        if b is None:
             break
         if tracing:
             trace()
@@ -370,7 +370,7 @@ def interpret(bytecode: bytearray, control: list, data: list, tracing: bool = Fa
         elif b == op_as_int:
             pass
         elif b == op_is_null:
-            data.append(1 if data.pop() == None else 0)
+            data.append(1 if data.pop() is None else 0)
 
         # Arithmetic, logic, etc.
         elif b == op_plus:
