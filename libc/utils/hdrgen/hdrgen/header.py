@@ -290,11 +290,11 @@ class HeaderFile:
             # elide the blank line between the declarations.
             if last_name == function.name_without_underscores():
                 content.pop()
-            if function.guard == None and current_guard == None:
+            if function.guard is None and current_guard is None:
                 content.append(str(function) + " __NOEXCEPT;")
                 content.append("")
             else:
-                if current_guard == None:
+                if current_guard is None:
                     current_guard = function.guard
                     content.append(f"#ifdef {current_guard}")
                     content.append(str(function) + " __NOEXCEPT;")
@@ -312,7 +312,7 @@ class HeaderFile:
                     content.append(str(function) + " __NOEXCEPT;")
                     content.append("")
             last_name = function.name_without_underscores()
-        if current_guard != None:
+        if current_guard is not None:
             content.pop()
             content.append(f"#endif // {current_guard}")
             content.append("")
