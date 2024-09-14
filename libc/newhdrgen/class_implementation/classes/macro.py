@@ -13,7 +13,7 @@ class Macro:
         self.value = value
 
     def __str__(self):
-        if self.value != None:
+        if self.value is not None:
             return f"#define {self.name} {self.value}"
         else:
             return f"#define {self.name}"
