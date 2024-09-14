@@ -92,7 +92,7 @@ class DebugInfodTests(TestBase):
         line_entry = addr.GetLineEntry()
         self.assertEqual(
             should_have_loc,
-            line_entry != None and line_entry.IsValid(),
+            line_entry is not None and line_entry.IsValid(),
             "Loc line entry is valid",
         )
         if should_have_loc:
@@ -141,7 +141,7 @@ class DebugInfodTests(TestBase):
             if self.aout == "":
                 self.aout = os.path.join(test_dir, f)
 
-        use_debuginfod = debuginfo != None or executable != None
+        use_debuginfod = debuginfo is not None or executable is not None
 
         # Populated the 'file://... mocked' Debuginfod server:
         if use_debuginfod:
