@@ -26,8 +26,8 @@ class Macro:
         return self.name.__hash__()
 
     def __str__(self):
-        if self.header != None:
+        if self.header is not None:
             return ""
-        if self.value != None:
+        if self.value is not None:
             return f"#define {self.name} {self.value}"
         return f"#define {self.name}"
