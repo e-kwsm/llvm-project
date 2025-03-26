@@ -59,23 +59,8 @@ THE SOFTWARE.
 #include <unistd.h>
 #endif
 
-using std::cout;
-using std::endl;
-using std::vector;
-using std::string;
-using std::ifstream;
-using std::ofstream;
-using std::regex;
-using std::regex_match;
-using std::regex_search;
-using std::regex_replace;
-using std::map;
-using std::smatch;
-using std::stringstream;
-
-
 struct SystemCmdOut {
-  string out;
+  std::string out;
   int exitCode = 0;
 };
 
@@ -88,24 +73,24 @@ class HipBinUtil {
   }
   virtual ~HipBinUtil();
   // Common helper functions
-  string replaceStr(const string& s, const string& toReplace,
-                    const string& replaceWith) const;
-  string replaceRegex(const string& s, regex toReplace,
-                      string replaceWith) const;
+  std::string replaceStr(const std::string& s, const std::string& toReplace,
+                         const std::string& replaceWith) const;
+  std::string replaceRegex(const std::string& s, std::regex toReplace,
+                           std::string replaceWith) const;
   SystemCmdOut exec(const char* cmd, bool printConsole) const;
-  string getTempDir();
+  std::string getTempDir();
   void deleteTempFiles();
-  string mktempFile(string name);
-  string readConfigMap(map<string, string> hipVersionMap,
-                       string keyName, string defaultValue) const;
-  map<string, string> parseConfigFile(fs::path configPath) const;
-  bool substringPresent(string fullString, string subString) const;
-  bool stringRegexMatch(string fullString, string pattern) const;
-  bool checkCmd(const vector<string>& commands, const string& argument);
+  std::string mktempFile(std::string name);
+  std::string readConfigMap(std::map<std::string, std::string> hipVersionMap,
+                            std::string keyName, std::string defaultValue) const;
+  std::map<std::string, std::string> parseConfigFile(fs::path configPath) const;
+  bool substringPresent(std::string fullString, std::string subString) const;
+  bool stringRegexMatch(std::string fullString, std::string pattern) const;
+  bool checkCmd(const std::vector<std::string>& commands, const std::string& argument);
 
  private:
   HipBinUtil() {}
-  vector<string> tmpFiles_;
+  std::vector<std::string> tmpFiles_;
   static HipBinUtil *instance;
 };
 
@@ -117,8 +102,8 @@ HipBinUtil::~HipBinUtil() {
 }
 
 // create temp file with the template name
-string HipBinUtil::mktempFile(string name) {
-  string fileName;
+std::string HipBinUtil::mktempFile(std::string name) {
+  std::string fileName;
 #if defined(_WIN32) || defined(_WIN64)
   fileName = _mktemp(&name[0]);
 #else
@@ -129,46 +114,46 @@ string HipBinUtil::mktempFile(string name) {
 }
 
 // matches the pattern in the string
-bool HipBinUtil::stringRegexMatch(string fullString, string pattern) const {
-  return regex_match(fullString, regex(pattern));
+bool HipBinUtil::stringRegexMatch(std::string fullString, std::string pattern) const {
+  return std::regex_match(fullString, std::regex(pattern));
 }
 
 // subtring is present in string
-bool HipBinUtil::substringPresent(string fullString, string subString) const {
-  return fullString.find(subString) != string::npos;
+bool HipBinUtil::substringPresent(std::string fullString, std::string subString) const {
+  return fullString.find(subString) != std::string::npos;
 }
 
 // replaces the toReplace string with replaceWith string. Returns the new string
-string HipBinUtil::replaceStr(const string& s, const string& toReplace,
-                              const string& replaceWith) const {
-  string out = s;
+std::string HipBinUtil::replaceStr(const std::string& s, const std::string& toReplace,
+                                   const std::string& replaceWith) const {
+  std::string out = s;
   std::size_t pos = out.find(toReplace);
-  if (pos == string::npos) return out;
+  if (pos == std::string::npos) return out;
   return out.replace(pos, toReplace.length(), replaceWith);
 }
 
 // replaces the toReplace regex pattern with replaceWith string.
 // Returns the new string
-string HipBinUtil::replaceRegex(const string& s, regex toReplace,
-                                string replaceWith) const {
-  string out = s;
-  while (regex_search(out, toReplace)) {
-    out = regex_replace(out, toReplace, replaceWith);
+std::string HipBinUtil::replaceRegex(const std::string& s, std::regex toReplace,
+                                     std::string replaceWith) const {
+  std::string out = s;
+  while (std::regex_search(out, toReplace)) {
+    out = std::regex_replace(out, toReplace, replaceWith);
   }
   return out;
 }
 
 // reads the config file and stores it in a map for access
-map<string, string> HipBinUtil::parseConfigFile(fs::path configPath) const {
-  map<string, string> configMap;
-  ifstream isFile(configPath.string());
-  string line;
+std::map<std::string, std::string> HipBinUtil::parseConfigFile(fs::path configPath) const {
+  std::map<std::string, std::string> configMap;
+  std::ifstream isFile(configPath.string());
+  std::string line;
   if (isFile.is_open()) {
     while (std::getline(isFile, line)) {
       std::istringstream is_line(line);
-      string key;
+      std::string key;
       if (std::getline(is_line, key, '=')) {
-        string value;
+	std::string value;
         if (std::getline(is_line, value)) {
           configMap.insert({ key, value });
         }
@@ -185,19 +170,19 @@ void HipBinUtil::deleteTempFiles() {
   for (unsigned int i = 0; i < tmpFiles_.size(); i++) {
     try {
       if (!fs::remove(tmpFiles_.at(i)))
-        std::cerr << "Error deleting temp name: "<< tmpFiles_.at(i) <<endl;
+        std::cerr << "Error deleting temp name: "<< tmpFiles_.at(i) << std::endl;
     }
     catch(...) {
-      std::cerr << "Error deleting temp name: "<< tmpFiles_.at(i) <<endl;
+      std::cerr << "Error deleting temp name: "<< tmpFiles_.at(i) << std::endl;
     }
   }
 }
 
 // Create a new temporary directory and return it
-string HipBinUtil::getTempDir() {
+std::string HipBinUtil::getTempDir() {
   // mkdtemp is only applicable for unix and not windows.
   // Using filesystem becasuse of windows limitation
-  string tmpdir = fs::temp_directory_path().string();
+  std::string tmpdir = fs::temp_directory_path().string();
   // tmpDirs_.push_back(tmpdir);
   return tmpdir;
 }
@@ -208,7 +193,7 @@ SystemCmdOut HipBinUtil::exec(const char* cmd,
   SystemCmdOut sysOut;
   try {
     char buffer[128];
-    string result = "";
+    std::string result = "";
     #if defined(_WIN32) || defined(_WIN64)
       FILE* pipe = _popen(cmd, "r");
     #else
@@ -220,7 +205,7 @@ SystemCmdOut HipBinUtil::exec(const char* cmd,
         result += buffer;
       }
     } catch (...) {
-      std::cerr << "Error while executing the command: " << cmd << endl;
+      std::cerr << "Error while executing the command: " << cmd << std::endl;
     }
     #if defined(_WIN32) || defined(_WIN64)
       sysOut.exitCode = _pclose(pipe);
@@ -229,7 +214,7 @@ SystemCmdOut HipBinUtil::exec(const char* cmd,
       sysOut.exitCode =  WEXITSTATUS(closeStatus);
     #endif
     if (printConsole == true) {
-      cout << result;
+      std::cout << result;
     }
     sysOut.out = result;
   }
@@ -240,8 +225,8 @@ SystemCmdOut HipBinUtil::exec(const char* cmd,
 }
 
 // returns the value of the key from the Map passed
-string HipBinUtil::readConfigMap(map<string, string> hipVersionMap,
-                                 string keyName, string defaultValue) const {
+std::string HipBinUtil::readConfigMap(std::map<std::string, std::string> hipVersionMap,
+                                      std::string keyName, std::string defaultValue) const {
   auto it = hipVersionMap.find(keyName);
   if (it != hipVersionMap.end()) {
     return it->second;
@@ -251,8 +236,8 @@ string HipBinUtil::readConfigMap(map<string, string> hipVersionMap,
 
 
 
-bool HipBinUtil::checkCmd(const vector<string>& commands,
-                          const string& argument) {
+bool HipBinUtil::checkCmd(const std::vector<std::string>& commands,
+                          const std::string& argument) {
   bool found = false;
   for (unsigned int i = 0; i < commands.size(); i++) {
     if (argument.compare(commands.at(i)) == 0) {

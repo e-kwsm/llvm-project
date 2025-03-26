@@ -37,15 +37,15 @@ class HipBin;
 class HipBin {
  private:
   HipBinUtil* hipBinUtilPtr_;
-  vector<HipBinBase *> hipBinBasePtrs_;
+  std::vector<HipBinBase *> hipBinBasePtrs_;
   HipBinBase* hipBinNVPtr_;
   HipBinBase* hipBinAMDPtr_;
 
  public:
   HipBin();
   ~HipBin();
-  vector<HipBinBase *> &getHipBinPtrs();
-  void executeHipBin(string filename, int argc, char* argv[]);
+  std::vector<HipBinBase *> &getHipBinPtrs();
+  void executeHipBin(std::string filename, int argc, char* argv[]);
   void executeHipConfig(int argc, char* argv[]);
   void executeHipCC(int argc, char* argv[]);
 };
@@ -70,7 +70,7 @@ HipBin::HipBin() {
   }
   // if no device is detected, then it is defaulted to AMD
   if (!platformDetected) {
-    std::cerr << "Device not supported - Defaulting to AMD" << endl;
+    std::cerr << "Device not supported - Defaulting to AMD" << std::endl;
     // populates the struct with AMD info
     hipBinBasePtrs_.push_back(hipBinAMDPtr_);
   }
@@ -84,12 +84,12 @@ HipBin::~HipBin() {
   delete hipBinUtilPtr_;
 }
 
-vector<HipBinBase*>& HipBin::getHipBinPtrs() {
+std::vector<HipBinBase*>& HipBin::getHipBinPtrs() {
   return hipBinBasePtrs_;  // Return the populated device pointers.
 }
 
 
-void HipBin::executeHipBin(string filename, int argc, char* argv[]) {
+void HipBin::executeHipBin(std::string filename, int argc, char* argv[]) {
   if (hipBinUtilPtr_->substringPresent(filename, "hipconfig")) {
     executeHipConfig(argc, argv);
   } else if (hipBinUtilPtr_->substringPresent(filename, "hipcc")) {
@@ -97,15 +97,15 @@ void HipBin::executeHipBin(string filename, int argc, char* argv[]) {
   } else {
     std::cerr << "Command " << filename
     << " not supported. Name the exe as hipconfig"
-    << " or hipcc and then try again ..." << endl;
+    << " or hipcc and then try again ..." << std::endl;
     exit(-1);
   }
 }
 
 
 void HipBin::executeHipCC(int argc, char* argv[]) {
-  vector<HipBinBase*>& platformPtrs = getHipBinPtrs();
-  vector<string> argvcc;
+  std::vector<HipBinBase*>& platformPtrs = getHipBinPtrs();
+  std::vector<std::string> argvcc;
   for (int i = 0; i < argc; i++) {
     argvcc.push_back(argv[i]);
   }
@@ -116,7 +116,7 @@ void HipBin::executeHipCC(int argc, char* argv[]) {
 
 
 void HipBin::executeHipConfig(int argc, char* argv[]) {
-  vector<HipBinBase*>& platformPtrs = getHipBinPtrs();
+  std::vector<HipBinBase*>& platformPtrs = getHipBinPtrs();
   for (unsigned int j = 0; j < platformPtrs.size(); j++) {
     if (argc == 1) {
       platformPtrs.at(j)->printFull();
@@ -127,31 +127,31 @@ void HipBin::executeHipConfig(int argc, char* argv[]) {
       switch (cmd) {
       case help: platformPtrs.at(j)->printUsage();
         break;
-      case path: cout << platformPtrs.at(j)->getHipPath();
+      case path: std::cout << platformPtrs.at(j)->getHipPath();
         break;
-      case roccmpath: cout << platformPtrs.at(j)->getRoccmPath();
+      case roccmpath: std::cout << platformPtrs.at(j)->getRoccmPath();
         break;
-      case cpp_config: cout << platformPtrs.at(j)->getCppConfig();
+      case cpp_config: std::cout << platformPtrs.at(j)->getCppConfig();
         break;
-      case compiler: cout << CompilerTypeStr((
+      case compiler: std::cout << CompilerTypeStr((
                              platformPtrs.at(j)->getPlatformInfo()).compiler);
         break;
-      case platform: cout << PlatformTypeStr((
+      case platform: std::cout << PlatformTypeStr((
                              platformPtrs.at(j)->getPlatformInfo()).platform);
         break;
-      case runtime: cout << RuntimeTypeStr((
+      case runtime: std::cout << RuntimeTypeStr((
                             platformPtrs.at(j)->getPlatformInfo()).runtime);
         break;
-      case hipclangpath: cout << platformPtrs.at(j)->getCompilerPath();
+      case hipclangpath: std::cout << platformPtrs.at(j)->getCompilerPath();
         break;
       case full: platformPtrs.at(j)->printFull();
         break;
-      case version: cout << platformPtrs.at(j)->getHipVersion();
+      case version: std::cout << platformPtrs.at(j)->getHipVersion();
         break;
       case check: platformPtrs.at(j)->checkHipconfig();
         break;
       case newline: platformPtrs.at(j)->printFull();
-        cout << endl;
+        std::cout << std::endl;
         break;
       default:
         platformPtrs.at(j)->printUsage();

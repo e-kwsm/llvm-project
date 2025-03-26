@@ -31,34 +31,34 @@ THE SOFTWARE.
 
 class HipBinNvidia : public HipBinBase {
  private:
-  string cudaPath_ = "";
+  std::string cudaPath_ = "";
   PlatformInfo platformInfoNV_;
-  string hipCFlags_, hipCXXFlags_, hipLdFlags_;
+  std::string hipCFlags_, hipCXXFlags_, hipLdFlags_;
 
  public:
   HipBinNvidia();
   ~HipBinNvidia() override = default;
   virtual bool detectPlatform();
   virtual void constructCompilerPath();
-  virtual const string& getCompilerPath() const;
+  virtual const std::string& getCompilerPath() const;
   virtual const PlatformInfo& getPlatformInfo() const;
-  virtual string getCppConfig();
+  virtual std::string getCppConfig();
   virtual void printFull();
   virtual void printCompilerInfo() const;
-  virtual string getCompilerVersion();
+  virtual std::string getCompilerVersion();
   virtual void checkHipconfig();
-  virtual string getDeviceLibPath() const;
-  virtual string getHipLibPath() const;
-  virtual string getHipCC() const;
-  virtual string getCompilerIncludePath();
-  virtual string getHipInclude() const;
+  virtual std::string getDeviceLibPath() const;
+  virtual std::string getHipLibPath() const;
+  virtual std::string getHipCC() const;
+  virtual std::string getCompilerIncludePath();
+  virtual std::string getHipInclude() const;
   virtual void initializeHipCXXFlags();
   virtual void initializeHipCFlags();
   virtual void initializeHipLdFlags();
-  virtual const string& getHipCXXFlags() const;
-  virtual const string& getHipCFlags() const;
-  virtual const string& getHipLdFlags() const;
-  virtual void executeHipCCCmd(vector<string> argv);
+  virtual const std::string& getHipCXXFlags() const;
+  virtual const std::string& getHipCFlags() const;
+  virtual const std::string& getHipLdFlags() const;
+  virtual void executeHipCCCmd(std::vector<std::string> argv);
 };
 
 HipBinNvidia::HipBinNvidia() {
@@ -76,8 +76,8 @@ HipBinNvidia::HipBinNvidia() {
 
 // detects if cuda is installed
 bool HipBinNvidia::detectPlatform() {
-  string out;
-  const string& nvccPath = getCompilerPath();
+  std::string out;
+  const std::string& nvccPath = getCompilerPath();
   fs::path cmdNv = nvccPath;
   cmdNv /= "bin/nvcc";
   const OsType& os = getOSInfo();
@@ -92,7 +92,7 @@ bool HipBinNvidia::detectPlatform() {
       detected = true;
       if (var.hipPlatformEnv_ == "nvcc")
         std::cerr << "Warning: HIP_PLATFORM=nvcc is deprecated."
-             << "Please use HIP_PLATFORM=nvidia." << endl;
+             << "Please use HIP_PLATFORM=nvidia." << std::endl;
     }
   }
   return detected;
@@ -101,15 +101,15 @@ bool HipBinNvidia::detectPlatform() {
 
 
 // returns device lib path
-string HipBinNvidia::getDeviceLibPath() const {
-  cout << "TODO Not required for now" << endl;
+std::string HipBinNvidia::getDeviceLibPath() const {
+  std::cout << "TODO Not required for now" << std::endl;
   return "";
 }
 
 // returns compiler path
-string HipBinNvidia::getHipCC() const {
-  string hipCC;
-  const string& cudaPath = getCompilerPath();
+std::string HipBinNvidia::getHipCC() const {
+  std::string hipCC;
+  const std::string& cudaPath = getCompilerPath();
   fs::path hipCCPath;
   hipCCPath = cudaPath;
   hipCCPath /= "bin/nvcc";
@@ -120,46 +120,46 @@ string HipBinNvidia::getHipCC() const {
 }
 
 // returns compiler include path
-string HipBinNvidia::getCompilerIncludePath() {
-  cout << "TODO Not required for now" << endl;
+std::string HipBinNvidia::getCompilerIncludePath() {
+  std::cout << "TODO Not required for now" << std::endl;
   return "";
 }
 
 
 // checks Hipconfig
 void HipBinNvidia::checkHipconfig() {
-  cout << endl << "Check system installation: " << endl;
-  cout << "check hipconfig in PATH..." << endl;
+  std::cout << std::endl << "Check system installation: " << std::endl;
+  std::cout << "check hipconfig in PATH..." << std::endl;
   if (system("which hipconfig > /dev/null 2>&1") != 0) {
-    std::cerr << "FAIL " << endl;
+    std::cerr << "FAIL " << std::endl;
   } else {
-    cout << "good" << endl;
+    std::cout << "good" << std::endl;
   }
 }
 
 // prints full
 void HipBinNvidia::printFull() {
-  const string& hipVersion = getHipVersion();
-  const string&  hipPath = getHipPath();
-  const string& roccmPath = getRoccmPath();
+  const std::string& hipVersion = getHipVersion();
+  const std::string&  hipPath = getHipPath();
+  const std::string& roccmPath = getRoccmPath();
   const PlatformInfo& platformInfo = getPlatformInfo();
-  const string& ccpConfig = getCppConfig();
-  const string& cudaPath = getCompilerPath();
-  cout << "HIP version: " << hipVersion << endl;
-  cout << endl << "==hipconfig" << endl;
-  cout << "HIP_PATH           :" << hipPath << endl;
-  cout << "ROCM_PATH          :" << roccmPath << endl;
-  cout << "HIP_COMPILER       :" << CompilerTypeStr(
-                                    platformInfo.compiler) << endl;
-  cout << "HIP_PLATFORM       :" << PlatformTypeStr(
-                                    platformInfo.platform) << endl;
-  cout << "HIP_RUNTIME        :" << RuntimeTypeStr(
-                                    platformInfo.runtime) << endl;
-  cout << "CPP_CONFIG         :" << ccpConfig << endl;
-  cout << endl << "== nvcc" << endl;
-  cout << "CUDA_PATH          :" << cudaPath <<endl;
+  const std::string& ccpConfig = getCppConfig();
+  const std::string& cudaPath = getCompilerPath();
+  std::cout << "HIP version: " << hipVersion << std::endl;
+  std::cout << std::endl << "==hipconfig" << std::endl;
+  std::cout << "HIP_PATH           :" << hipPath << std::endl;
+  std::cout << "ROCM_PATH          :" << roccmPath << std::endl;
+  std::cout << "HIP_COMPILER       :" << CompilerTypeStr(
+                                         platformInfo.compiler) << std::endl;
+  std::cout << "HIP_PLATFORM       :" << PlatformTypeStr(
+                                         platformInfo.platform) << std::endl;
+  std::cout << "HIP_RUNTIME        :" << RuntimeTypeStr(
+                                         platformInfo.runtime) << std::endl;
+  std::cout << "CPP_CONFIG         :" << ccpConfig << std::endl;
+  std::cout << std::endl << "== nvcc" << std::endl;
+  std::cout << "CUDA_PATH          :" << cudaPath << std::endl;
   printCompilerInfo();
-  cout << endl << "== Environment Variables" << endl;
+  std::cout << std::endl << "== Environment Variables" << std::endl;
   printEnvironmentVariables();
   getSystemInfo();
   if (fs::exists("/usr/bin/lsb_release"))
@@ -167,8 +167,8 @@ void HipBinNvidia::printFull() {
 }
 
 // returns hip include
-string HipBinNvidia::getHipInclude() const {
-  string hipPath, hipInclude;
+std::string HipBinNvidia::getHipInclude() const {
+  std::string hipPath, hipInclude;
   hipPath = getHipPath();
   fs::path hipIncludefs = hipPath;
   hipIncludefs /= "include";
@@ -178,8 +178,8 @@ string HipBinNvidia::getHipInclude() const {
 
 // initializes Hip ld Flags
 void HipBinNvidia::initializeHipLdFlags() {
-  string hipLdFlags;
-  const string& cudaPath = getCompilerPath();
+  std::string hipLdFlags;
+  const std::string& cudaPath = getCompilerPath();
   if (getOSInfo() == windows)
     hipLdFlags = " -Wno-deprecated-gpu-targets -lcuda -lcudart -L\"" +
                cudaPath + "/lib64\"";
@@ -191,12 +191,12 @@ void HipBinNvidia::initializeHipLdFlags() {
 
 
 // returns hipc Flags
-const string& HipBinNvidia::getHipCFlags() const {
+const std::string& HipBinNvidia::getHipCFlags() const {
   return hipCFlags_;
 }
 
 // returns hip ld flags
-const string& HipBinNvidia::getHipLdFlags() const {
+const std::string& HipBinNvidia::getHipLdFlags() const {
   return hipLdFlags_;
 }
 
@@ -205,19 +205,19 @@ void HipBinNvidia::initializeHipCFlags() {
 }
 
 // returns Hipccx flags
-const string& HipBinNvidia::getHipCXXFlags() const {
+const std::string& HipBinNvidia::getHipCXXFlags() const {
   return hipCXXFlags_;
 }
 
 // initializes the HIPCCX flags
 void HipBinNvidia::initializeHipCXXFlags() {
-  string hipCXXFlags = " -Wno-deprecated-gpu-targets ";
+  std::string hipCXXFlags = " -Wno-deprecated-gpu-targets ";
   hipCXXFlags_ = hipCXXFlags;
 }
 
 // returns Hip Lib Path
-string HipBinNvidia::getHipLibPath() const {
-  string hipLibPath;
+std::string HipBinNvidia::getHipLibPath() const {
+  std::string hipLibPath;
   const EnvVariables& env = getEnvVariables();
   hipLibPath = env.hipLibPathEnv_;
   return hipLibPath;
@@ -225,7 +225,7 @@ string HipBinNvidia::getHipLibPath() const {
 
 // gets nvcc compiler Path
 void HipBinNvidia::constructCompilerPath() {
-  string compilerPath;
+  std::string compilerPath;
   const EnvVariables& envVariables = getEnvVariables();
   if (envVariables.cudaPathEnv_.empty()) {
     fs::path cudaPathfs;
@@ -239,13 +239,13 @@ void HipBinNvidia::constructCompilerPath() {
 
 
 // returns nvcc compiler Path
-const string& HipBinNvidia::getCompilerPath() const {
+const std::string& HipBinNvidia::getCompilerPath() const {
   return cudaPath_;
 }
 
 // returns nvcc information
 void HipBinNvidia::printCompilerInfo() const {
-  string cmd;
+  std::string cmd;
   fs::path nvcc;
   nvcc = getCompilerPath();
   nvcc /= "bin/nvcc";
@@ -257,8 +257,8 @@ void HipBinNvidia::printCompilerInfo() const {
 }
 
 // returns nvcc version
-string HipBinNvidia::getCompilerVersion() {
-  string compilerVersion, cmd;
+std::string HipBinNvidia::getCompilerVersion() {
+  std::string compilerVersion, cmd;
   fs::path nvcc;
   nvcc = getCompilerPath();
   nvcc /= "bin/nvcc";
@@ -276,10 +276,10 @@ const PlatformInfo& HipBinNvidia::getPlatformInfo() const {
 }
 
 // returns the cpp config
-string HipBinNvidia::getCppConfig() {
-  string cppConfig =
+std::string HipBinNvidia::getCppConfig() {
+  std::string cppConfig =
   " -D__HIP_PLATFORM_NVCC__= -D__HIP_PLATFORM_NVIDIA__= -I";
-  string hipPath;
+  std::string hipPath;
   hipPath = getHipPath();
   cppConfig += hipPath;
   cppConfig += "/include -I";
@@ -289,9 +289,9 @@ string HipBinNvidia::getCppConfig() {
 }
 
 // performs hipcc command
-void HipBinNvidia::executeHipCCCmd(vector<string> argv) {
+void HipBinNvidia::executeHipCCCmd(std::vector<std::string> argv) {
   if (argv.size() < 2) {
-    cout<< "No Arguments passed, exiting ...\n";
+    std::cout << "No Arguments passed, exiting ...\n";
     exit(EXIT_SUCCESS);
   }
   const EnvVariables& var = getEnvVariables();
@@ -323,59 +323,59 @@ void HipBinNvidia::executeHipCCCmd(vector<string> argv) {
   bool buildDeps = 0;
   bool linkType = 1;
   bool setLinkType = 0;
-  string hsacoVersion;
+  std::string hsacoVersion;
   bool funcSupp = 0;      // enable function support
   bool rdc = 0;           // whether -fgpu-rdc is on
-  string prevArg;
+  std::string prevArg;
   // TODO(hipcc): convert toolArgs to an array rather than a string
-  string toolArgs;
-  string optArg;
-  vector<string> options, inputs;
+  std::string toolArgs;
+  std::string optArg;
+  std::vector<std::string> options, inputs;
   // TODO(hipcc): hipcc uses --amdgpu-target for historical reasons.
   // It should be replaced by clang option --offload-arch.
-  vector<string> targetOpts = {"--offload-arch=", "--amdgpu-target="};
-  string targetsStr;
+  std::vector<std::string> targetOpts = {"--offload-arch=", "--amdgpu-target="};
+  std::string targetsStr;
   bool skipOutputFile = false;
   const OsType& os = getOSInfo();
-  string hip_compile_cxx_as_hip;
+  std::string hip_compile_cxx_as_hip;
   if (var.hipCompileCxxAsHipEnv_.empty()) {
     hip_compile_cxx_as_hip = "1";
   } else {
     hip_compile_cxx_as_hip = var.hipCompileCxxAsHipEnv_;
   }
-  string HIPLDARCHFLAGS;
+  std::string HIPLDARCHFLAGS;
   initializeHipCXXFlags();
   initializeHipCFlags();
   initializeHipLdFlags();
-  string HIPCXXFLAGS, HIPCFLAGS, HIPLDFLAGS;
+  std::string HIPCXXFLAGS, HIPCFLAGS, HIPLDFLAGS;
   HIPCFLAGS = getHipCFlags();
   HIPCXXFLAGS = getHipCXXFlags();
   HIPLDFLAGS = getHipLdFlags();
-  string hipPath;
+  std::string hipPath;
   hipPath = getHipPath();
   const PlatformInfo& platformInfo = getPlatformInfo();
-  const string& nvccPath = getCompilerPath();
-  const string& hipVersion = getHipVersion();
+  const std::string& nvccPath = getCompilerPath();
+  const std::string& hipVersion = getHipVersion();
   if (verbose & 0x2) {
-    cout << "HIP_PATH=" << hipPath << endl;
-    cout << "HIP_PLATFORM=" <<  PlatformTypeStr(platformInfo.platform) <<endl;
-    cout << "HIP_COMPILER=" << CompilerTypeStr(platformInfo.compiler) <<endl;
-    cout << "HIP_RUNTIME=" << RuntimeTypeStr(platformInfo.runtime) <<endl;
-    cout << "CUDA_PATH=" << nvccPath <<endl;
+    std::cout << "HIP_PATH=" << hipPath << std::endl;
+    std::cout << "HIP_PLATFORM=" <<  PlatformTypeStr(platformInfo.platform) << std::endl;
+    std::cout << "HIP_COMPILER=" << CompilerTypeStr(platformInfo.compiler) << std::endl;
+    std::cout << "HIP_RUNTIME=" << RuntimeTypeStr(platformInfo.runtime) << std::endl;
+    std::cout << "CUDA_PATH=" << nvccPath << std::endl;
   }
   if (verbose & 0x4) {
-    cout <<  "hipcc-args: ";
+    std::cout <<  "hipcc-args: ";
     for (unsigned int i = 1; i< argv.size(); i++) {
-      cout <<  argv.at(i) << " ";
+      std::cout <<  argv.at(i) << " ";
     }
-    cout << endl;
+    std::cout << std::endl;
   }
   // Handle code object generation
-  string ISACMD;
+  std::string ISACMD;
   ISACMD += hipPath + "/bin/hipcc -ptx ";
   if (argv.at(1) == "--genco") {
     for (unsigned int i = 2; i < argv.size(); i++) {
-      string isaarg = argv.at(i);
+      std::string isaarg = argv.at(i);
       ISACMD += " ";
       if (hipBinUtilPtr_->substringPresent(isaarg,"--rocm-path=") ||
           hipBinUtilPtr_->substringPresent(isaarg,"--hip-path=")) {
@@ -385,20 +385,20 @@ void HipBinNvidia::executeHipCCCmd(vector<string> argv) {
       }
     }
     if (verbose & 0x1) {
-      cout<< "hipcc-cmd: " << ISACMD << "\n";
+      std::cout << "hipcc-cmd: " << ISACMD << "\n";
     }
     system(ISACMD.c_str());
     exit(EXIT_SUCCESS);
   }
   for (unsigned int argcount = 1; argcount < argv.size(); argcount++) {
     // Save $arg, it can get changed in the loop.
-    string arg = argv.at(argcount);
-    regex toRemove("\\s+");
+    std::string arg = argv.at(argcount);
+    std::regex toRemove("\\s+");
     // TODO(hipcc): figure out why this space removal is wanted.
     // TODO(hipcc): If someone has gone to the effort of quoting
     // the spaces to the shell
     // TODO(hipcc): why are we removing it here?
-    string trimarg = hipBinUtilPtr_->replaceRegex(arg, toRemove, "");
+    std::string trimarg = hipBinUtilPtr_->replaceRegex(arg, toRemove, "");
     bool swallowArg = false;
     bool escapeArg = true;
     // do not pass amd paths to nvcc
@@ -428,8 +428,8 @@ void HipBinNvidia::executeHipCCCmd(vector<string> argv) {
     }
     // Check target selection option: --offload-arch= and --amdgpu-target=...
     for (unsigned int i = 0; i <targetOpts.size(); i++) {
-      string targetOpt = targetOpts.at(i);
-      string pattern = "^" + targetOpt + ".*";
+      std::string targetOpt = targetOpts.at(i);
+      std::string pattern = "^" + targetOpt + ".*";
       if (hipBinUtilPtr_->stringRegexMatch(arg, pattern)) {
         // If targets string is not empty, add a comma before
         // adding new target option value.
@@ -551,8 +551,8 @@ void HipBinNvidia::executeHipCCCmd(vector<string> argv) {
     }
     // Windows needs different quoting, ignore for now
     if (os != windows && escapeArg) {
-      regex reg("[^-a-zA-Z0-9_=+,.\\/]");
-      arg = regex_replace(arg, reg, "\\$&");
+      std::regex reg("[^-a-zA-Z0-9_=+,.\\/]");
+      arg = std::regex_replace(arg, reg, "\\$&");
     }
     if (!swallowArg)
       toolArgs += " " + arg;
@@ -565,9 +565,9 @@ void HipBinNvidia::executeHipCCCmd(vector<string> argv) {
     HIPCXXFLAGS += " -M -D__CUDACC__";
     HIPCFLAGS += " -M -D__CUDACC__";
   }
-  string compiler;
+  std::string compiler;
   compiler = getHipCC();
-  string CMD = compiler;
+  std::string CMD = compiler;
   if (needCFLAGS) {
     CMD += " " + HIPCFLAGS;
   }
@@ -590,19 +590,19 @@ void HipBinNvidia::executeHipCCCmd(vector<string> argv) {
     CMD.append("\" ");
   }
   if (verbose & 0x1) {
-    cout << "hipcc-cmd: " <<  CMD << "\n";
+    std::cout << "hipcc-cmd: " <<  CMD << "\n";
   }
   if (printHipVersion) {
     if (runCmd) {
-      cout <<  "HIP version: ";
+      std::cout <<  "HIP version: ";
     }
-    cout << hipVersion << endl;
+    std::cout << hipVersion << std::endl;
   }
   if (printCXXFlags) {
-    cout << HIPCXXFLAGS;
+    std::cout << HIPCXXFLAGS;
   }
   if (printLDFlags) {
-    cout << HIPLDFLAGS;
+    std::cout << HIPLDFLAGS;
   }
   if (runCmd) {
     SystemCmdOut sysOut;
@@ -610,10 +610,10 @@ void HipBinNvidia::executeHipCCCmd(vector<string> argv) {
       CMD = "\"" + CMD + "\"";
 
     sysOut = hipBinUtilPtr_->exec(CMD.c_str(), true);
-    string cmdOut = sysOut.out;
+    std::string cmdOut = sysOut.out;
     int CMD_EXIT_CODE = sysOut.exitCode;
     if (CMD_EXIT_CODE !=0) {
-      cout <<  "failed to execute:"  << CMD << std::endl;
+      std::cout <<  "failed to execute:"  << CMD << std::endl;
     }
     exit(CMD_EXIT_CODE);
   }
