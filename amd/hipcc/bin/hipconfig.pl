@@ -198,7 +198,7 @@ if (!$printed or $p_full) {
         system("set | findstr //B //C:\"HIP\" //C:\"CUDA\" //C:\"LD_LIBRARY_PATH\"");
     } else {
         system("echo PATH=\$PATH");
-        system("env | egrep '^HIP|^CUDA|^LD_LIBRARY_PATH'");
+        system("env | grep -E '^HIP|^CUDA|^LD_LIBRARY_PATH'");
     }
 
 

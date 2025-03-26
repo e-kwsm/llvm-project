@@ -413,7 +413,7 @@ void HipBinBase::printEnvironmentVariables() const {
     string cmd = "echo PATH =";
     cmd += envVariables_.path_;
     system(cmd.c_str());
-    system("env | egrep '^HIP|^HSA|^CUDA|^LD_LIBRARY_PATH'");
+    system("env | grep -E '^HIP|^HSA|^CUDA|^LD_LIBRARY_PATH'");
   }
 }
 
