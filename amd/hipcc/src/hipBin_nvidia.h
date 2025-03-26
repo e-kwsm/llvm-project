@@ -301,31 +301,31 @@ void HipBinNvidia::executeHipCCCmd(vector<string> argv) {
   // Verbose: 0x1=commands, 0x2=paths, 0x4=hipcc args
   // set if user explicitly requests -stdlib=libc++.
   // (else we default to libstdc++ for better interop with g++):
-  bool setStdLib = 0;
-  bool default_amdgpu_target = 1;
-  bool compileOnly = 0;
-  bool needCXXFLAGS = 0;  // need to add CXX flags to compile step
-  bool needCFLAGS = 0;    // need to add C flags to compile step
-  bool needLDFLAGS = 1;   // need to add LDFLAGS to compile step.
-  bool fileTypeFlag = 0;  // to see if -x flag is mentioned
-  bool hasOMPTargets = 0;  // If OMP targets is mentioned
-  bool hasC = 0;          // options contain a c-style file
+  bool setStdLib = false;
+  bool default_amdgpu_target = true;
+  bool compileOnly = false;
+  bool needCXXFLAGS = false;  // need to add CXX flags to compile step
+  bool needCFLAGS = false;    // need to add C flags to compile step
+  bool needLDFLAGS = true;    // need to add LDFLAGS to compile step.
+  bool fileTypeFlag = false;  // to see if -x flag is mentioned
+  bool hasOMPTargets = false;  // If OMP targets is mentioned
+  bool hasC = false;          // options contain a c-style file
   // options contain a cpp-style file (NVCC must force recognition as GPU file)
-  bool hasCXX = 0;
+  bool hasCXX = false;
   // options contain a cu-style file (HCC must force recognition as GPU file)
-  bool hasCU = 0;
+  bool hasCU = false;
   // options contain a hip-style file (HIP-Clang must pass offloading options)
-  bool hasHIP = 0;
-  bool printHipVersion = 0;    // print HIP version
-  bool printCXXFlags = 0;      // print HIPCXXFLAGS
-  bool printLDFlags = 0;       // print HIPLDFLAGS
-  bool runCmd = 1;
-  bool buildDeps = 0;
-  bool linkType = 1;
-  bool setLinkType = 0;
+  bool hasHIP = false;
+  bool printHipVersion = false;    // print HIP version
+  bool printCXXFlags = false;      // print HIPCXXFLAGS
+  bool printLDFlags = false;       // print HIPLDFLAGS
+  bool runCmd = true;
+  bool buildDeps = false;
+  bool linkType = true;
+  bool setLinkType = false;
   string hsacoVersion;
-  bool funcSupp = 0;      // enable function support
-  bool rdc = 0;           // whether -fgpu-rdc is on
+  bool funcSupp = false;      // enable function support
+  bool rdc = false;           // whether -fgpu-rdc is on
   string prevArg;
   // TODO(hipcc): convert toolArgs to an array rather than a string
   string toolArgs;
