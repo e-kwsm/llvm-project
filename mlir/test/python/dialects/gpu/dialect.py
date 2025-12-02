@@ -120,8 +120,8 @@ def testGPUFuncOp():
 
             assert func.name.value == "kernel1"
             assert func.function_type.value == func_type
-            assert func.arg_attrs == None
-            assert func.res_attrs == None
+            assert func.arg_attrs is None
+            assert func.res_attrs is None
             assert func.arguments == []
             assert func.entry_block == func.body.blocks[0]
             assert func.is_kernel
