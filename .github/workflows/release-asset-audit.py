@@ -62,7 +62,7 @@ def _get_uploaders(release_version):
 
 def _get_major_release_version(release_title):
     # All release titles are of the form "LLVM X.Y.Z(-rcN)".
-    match = re.match("LLVM ([0-9]+)\.", release_title)
+    match = re.match(r"LLVM ([0-9]+)\.", release_title)
     if match is None:
         _write_comment_and_exit_with_error(
             f'Could not parse release version from release title "{release_title}".'
