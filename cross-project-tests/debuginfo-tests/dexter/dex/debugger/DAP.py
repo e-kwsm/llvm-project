@@ -395,7 +395,7 @@ class DAP(DebuggerBase, metaclass=abc.ABCMeta):
             # ["response: continued", "event: stopped", "event: continued"].
             if (
                 message["command"] in ["continue", "stepIn", "next", "stepOut"]
-                and message["success"] == True
+                and message["success"] is True
             ):
                 debugger_state.is_running = True
                 # Reset all state that is invalidated upon program continue.
@@ -405,13 +405,13 @@ class DAP(DebuggerBase, metaclass=abc.ABCMeta):
             # It is useful to cache a mapping of frames; since this is invalidated when we continue, and only this
             # message-handling thread should write to debugger_state, we do so while handling the response for
             # convenience.
-            if message["command"] == "stackTrace" and message["success"] == True:
+            if message["command"] == "stackTrace" and message["success"] is True:
                 debugger_state.frame_map = [
                     stackframe["id"] for stackframe in message["body"]["stackFrames"]
                 ]
             # The debugger communicates which optional DAP features are
             # supported in its initalize response.
-            if message["command"] == "initialize" and message["success"] == True:
+            if message["command"] == "initialize" and message["success"] is True:
                 body = message.get("body")
                 if body:
                     debugger_state.capabilities.update(logger, body)
