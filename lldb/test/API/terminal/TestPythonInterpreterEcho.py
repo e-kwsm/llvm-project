@@ -13,7 +13,7 @@ class PythonInterpreterEchoTest(PExpectTest):
     def verify_command_echo(
         self, command: str, expected_output: str = "", is_regex: bool = False
     ):
-        assert self.child != None
+        assert self.child is not None
         child = self.child
         self.assertIsNotNone(self.child, "expected a running lldb process.")
 
